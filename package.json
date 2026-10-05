@@ -1,0 +1,18 @@
+{
+  "name": "music-render-server",
+  "version": "1.0.0",
+  "description": "Servidor de música con Render + Neon",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "express": "^4.21.0",
+    "pg": "^8.13.0",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

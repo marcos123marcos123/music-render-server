@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💎 Versión Pro</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:linear-gradient(180deg,#0b0f19 0%,#161b22 100%);
+         color:#e6edf3; min-height:100vh; padding:20px; }
+  .container { max-width:640px; margin:0 auto; }
+  h1 { margin:0 0 8px; font-size:28px; text-align:center;
+       background:linear-gradient(90deg,#ffd700,#ff8c00);
+       -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle { color:#8b949e; margin-bottom:24px; font-size:14px; text-align:center; }
+  .card { background:#161b22; border:1px solid #30363d; border-radius:12px;
+          padding:20px; margin-bottom:16px; }
+  .card.gold { border-color:#ffd700; box-shadow:0 0 20px rgba(255,215,0,.1); }
+  .card h2 { margin:0 0 12px; font-size:13px; text-transform:uppercase;
+             color:#8b949e; letter-spacing:.05em; }
+  input { background:#0d1117; border:1px solid #30363d; color:#e6edf3;
+          padding:12px 14px; border-radius:8px; font-size:15px;
+          width:100%; margin-bottom:10px; }
+  input:focus { outline:none; border-color:#ffd700; }
+  button { background:linear-gradient(90deg,#ffd700,#ff8c00); color:#000;
+           border:none; padding:12px 20px; border-radius:8px; cursor:pointer;
+           font-size:15px; font-weight:700; width:100%; transition:all .15s; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .status { min-height:22px; font-size:14px; margin-top:10px; text-align:center; }
+  .info { background:#0d1117; border:1px solid #30363d; border-radius:8px;
+          padding:12px; font-size:13px; color:#8b949e; margin-bottom:12px; }
+  .info strong { color:#ffd700; }
+  .track { display:flex; padding:12px 0; border-bottom:1px solid #21262d;
+           align-items:center; gap:10px; }
+  .track:last-child { border-bottom:none; }
+  .track .num { color:#8b949e; min-width:26px; font-family:monospace; }
+  .track .info { flex:1; min-width:0; }
+  .track .title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .track .vid { font-size:11px; color:#8b949e; font-family:monospace; }
+  .track .bid { font-size:13px; color:#ffd700; font-weight:700; }
+  .muted { color:#8b949e; font-size:13px; }
+  .nav { text-align:center; margin-bottom:20px; font-size:13px; }
+  .nav a { color:#58a6ff; text-decoration:none; margin:0 8px; }
+</style>
+<script src="/ngrok-skip.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1>💎 Usuario Pro</h1>
+  <div class="subtitle">Paga para saltar la cola. Puja mínima 50. La puja más alta suena primero.</div>
+  <div class="nav">
+    <a href="/">← Usuario normal</a>
+    <a href="/verify">🔒 Verificar</a>
+  </div>
+
+  <div class="card gold">
+    <h2>Pide como Pro</h2>
+    <div class="info">
+      Puja mínima: <strong>50</strong>. Las pujas se ordenan de mayor a menor.
+      Si dos pagan lo mismo, va primero el que pidió antes.
+    </div>
+    <input id="video" placeholder="URL de YouTube o nombre">
+    <input id="title" placeholder="Título (opcional)">
+    <input id="bid" type="number" min="50" step="10" value="50" placeholder="Tu puja (≥50)">
+    <button type="button" id="addBtn" onclick="pujar()">💎 Pujar y pedir</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>Cola actual (con pujas)</h2>
+    <div id="queue"><div class="muted">Cola vacía</div></div>
+  </div>
+</div>
+
+<script>
+function extractVideoId(input) {
+  let s = (input || '').trim();
+  if (!s) return '';
+  let c = s;
+  if (!/^https?:\/\//i.test(c) &&
+      /^(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(c)) c = 'https://' + c;
+  try {
+    const u = new URL(c);
+    const host = u.hostname.replace(/^(www|m)\./i, '').toLowerCase();
+    if (host === 'youtu.be') return u.pathname.replace(/^\//, '').split('/')[0].split('?')[0] || s;
+    if (host === 'youtube.com') {
+      const v = u.searchParams.get('v');
+      if (v) return v;
+      const m = u.pathname.match(/^\/(?:shorts|embed|v)\/([A-Za-z0-9_\-]+)/);
+      if (m) return m[1];
+    }
+    return s;
+  } catch (_) { return s; }
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function refresh() {
+  try {
+    const q = await fetch('/api/public/queue').then(r=>r.json());
+    renderQueue(q);
+  } catch(e) {}
+}
+
+function renderQueue(q) {
+  const el = document.getElementById('queue');
+  if (!q || !q.length) {
+    el.innerHTML = '<div class="muted">Cola vacía</div>';
+    return;
+  }
+  el.innerHTML = q.map((it,i)=>`
+    <div class="track">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <div class="info">
+        <div class="title">${esc(it.title || it.video_id)}</div>
+        <div class="vid">${esc(it.video_id)}</div>
+      </div>
+      <div class="bid">${it.bid_amount > 0 ? '💎 '+it.bid_amount : '—'}</div>
+    </div>`).join('');
+}
+
+async function pujar() {
+  const btn = document.getElementById('addBtn');
+  const status = document.getElementById('status');
+  const raw = document.getElementById('video').value;
+  const title = document.getElementById('title').value.trim();
+  const bid = parseInt(document.getElementById('bid').value, 10);
+  const video_id = extractVideoId(raw);
+  if (!video_id) { status.innerHTML = '<span style="color:#f85149">⚠ Falta la canción</span>'; return; }
+  if (!bid || bid < 50) { status.innerHTML = '<span style="color:#f85149">⚠ Puja mínima: 50</span>'; return; }
+
+  btn.disabled = true; btn.textContent = 'Enviando…'; status.textContent = '';
+  try {
+    const r = await fetch('/api/public/queue', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ video_id, title: title || null, bid_amount: bid }),
+    });
+    if (!r.ok) throw new Error((await r.json()).detail || 'Error');
+    document.getElementById('video').value = '';
+    document.getElementById('title').value = '';
+    status.innerHTML = '<span style="color:#3fb950">✓ Puja registrada</span>';
+    setTimeout(()=>status.textContent='', 2500);
+    await refresh();
+  } catch(e) {
+    status.innerHTML = '<span style="color:#f85149">✕ ' + esc(e.message) + '</span>';
+  } finally {
+    btn.disabled = false; btn.textContent = '💎 Pujar y pedir';
+  }
+}
+
+refresh();
+setInterval(() => { if (!document.hidden) refresh(); }, 3000);
+</script>
+</body>
+</html>

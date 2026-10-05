@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎵 Pide tu música</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:#0b0f19; color:#e6edf3; min-height:100vh; padding:20px; }
+  .container { max-width:640px; margin:0 auto; }
+  h1 { margin:0 0 8px; font-size:26px; text-align:center; }
+  .subtitle { color:#8b949e; margin-bottom:24px; font-size:14px; text-align:center; }
+  .card { background:#161b22; border:1px solid #30363d; border-radius:12px;
+          padding:20px; margin-bottom:16px; }
+  .card h2 { margin:0 0 12px; font-size:13px; text-transform:uppercase;
+             color:#8b949e; letter-spacing:.05em; }
+  input, select { background:#0d1117; border:1px solid #30363d; color:#e6edf3;
+                  padding:12px 14px; border-radius:8px; font-size:15px;
+                  width:100%; margin-bottom:10px; }
+  input:focus { outline:none; border-color:#58a6ff; }
+  button { background:#238636; color:#fff; border:1px solid #2ea043;
+           padding:12px 20px; border-radius:8px; cursor:pointer; font-size:15px;
+           font-weight:600; width:100%; transition:all .15s; }
+  button:hover { background:#2ea043; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .status { min-height:22px; font-size:14px; margin-top:10px; text-align:center; }
+  .track { display:flex; padding:12px 0; border-bottom:1px solid #21262d; align-items:center; gap:10px; }
+  .track:last-child { border-bottom:none; }
+  .track .num { color:#8b949e; min-width:26px; font-family:monospace; }
+  .track .info { flex:1; min-width:0; }
+  .track .title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .track .vid { font-size:11px; color:#8b949e; font-family:monospace; }
+  .track .bid { font-size:11px; color:#3fb950; font-weight:600; }
+  .muted { color:#8b949e; font-size:13px; }
+  .now { text-align:center; }
+  .now .title { font-size:20px; font-weight:600; margin-bottom:4px; }
+  .progress { background:#21262d; height:6px; border-radius:3px; overflow:hidden; margin-top:8px; }
+  .progress > div { background:#58a6ff; height:100%; transition:width .3s; }
+  .nav { text-align:center; margin-bottom:20px; font-size:13px; }
+  .nav a { color:#58a6ff; text-decoration:none; margin:0 8px; }
+</style>
+<script src="/ngrok-skip.js"></script>
+</head>
+<body>
+<div class="container">
+  <a href="/login" id="configBtn" title="Configuración"
+     style="position:fixed;top:16px;right:16px;width:44px;height:44px;
+            background:#161b22;border:1px solid #30363d;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:22px;text-decoration:none;color:#8b949e;
+            transition:all .15s;z-index:100"
+     onmouseover="this.style.borderColor='#58a6ff';this.style.color='#58a6ff'"
+     onmouseout="this.style.borderColor='#30363d';this.style.color='#8b949e'">⚙</a>
+  <h1>🎵 Pide tu música</h1>
+  <div class="subtitle">Pega una URL o el nombre. Cuando termine la actual, arranca la tuya.</div>
+  <div class="nav">
+    <a href="/pro">💎 Versión Pro</a>
+    <a href="/verify">🔒 Verificar conexión</a>
+  </div>
+
+  <div class="card">
+    <h2>Reproduciendo ahora</h2>
+    <div id="nowPlaying" class="now"><div class="muted">—</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Pide una canción</h2>
+    <input id="video" placeholder="URL de YouTube o nombre de canción">
+    <input id="title" type="hidden">
+    <input id="searchBox" placeholder="🔍 Buscar en YouTube..." style="margin-top:8px">
+    <div id="searchResults" style="max-height:300px;overflow-y:auto;margin-top:8px"></div>
+    <button type="button" id="addBtn" onclick="pedir()">+ Pedir</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>Cola actual</h2>
+    <div id="queue"><div class="muted">Cola vacía</div></div>
+  </div>
+</div>
+
+<script>
+function extractVideoId(input) {
+  let s = (input || '').trim();
+  if (!s) return '';
+  let c = s;
+  if (!/^https?:\/\//i.test(c) &&
+      /^(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(c)) c = 'https://' + c;
+  try {
+    const u = new URL(c);
+    const host = u.hostname.replace(/^(www|m)\./i, '').toLowerCase();
+    if (host === 'youtu.be') {
+      const id = u.pathname.replace(/^\//, '').split('/')[0].split('?')[0];
+      return id || s;
+    }
+    if (host === 'youtube.com') {
+      const v = u.searchParams.get('v');
+      if (v) return v;
+      const m = u.pathname.match(/^\/(?:shorts|embed|v)\/([A-Za-z0-9_\-]+)/);
+      if (m) return m[1];
+      return s;
+    }
+    return s;
+  } catch (_) { return s; }
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmt(s){s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+
+async function refresh() {
+  try {
+    const [q, np] = await Promise.all([
+      fetch('/api/public/queue').then(r=>r.json()),
+      fetch('/api/public/now-playing').then(r=>r.json()),
+    ]);
+    renderNow(np);
+    renderQueue(q);
+  } catch(e) { /* silent */ }
+}
+
+function renderNow(np) {
+  const el = document.getElementById('nowPlaying');
+  if (!np || (!np.title && !np.video_id)) {
+    el.innerHTML = '<div class="muted">Sin reproducción</div>';
+    return;
+  }
+  const pct = np.duration > 0 ? Math.min(100, (np.position/np.duration)*100) : 0;
+  el.innerHTML = `
+    <div class="title">🎵 ${esc(np.title || np.video_id || '—')}</div>
+    <div class="muted">${np.playing ? '▶ Reproduciendo' : '⏸ Pausado'} · ${fmt(np.position)} / ${fmt(np.duration)}</div>
+    <div class="progress"><div style="width:${pct}%"></div></div>`;
+}
+
+function renderQueue(q) {
+  const el = document.getElementById('queue');
+  if (!q || !q.length) {
+    el.innerHTML = '<div class="muted">Cola vacía</div><div class="muted" style="font-size:12px;opacity:.7">Pide una canción para comenzar</div>';
+    return;
+  }
+  el.innerHTML = q.map((it,i)=>`
+    <div class="track">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <div class="info">
+        <div class="title">${esc(it.title || it.video_id)}</div>
+        <div class="vid">${esc(it.video_id)}</div>
+      </div>
+      ${it.bid_amount > 0 ? `<div class="bid">💎 ${it.bid_amount}</div>` : ''}
+    </div>`).join('');
+}
+
+async function pedir() {
+  const btn = document.getElementById('addBtn');
+  const status = document.getElementById('status');
+  const raw = document.getElementById('video').value;
+  const title = document.getElementById('title').value.trim();
+  const video_id = extractVideoId(raw);
+  if (!video_id) {
+    status.innerHTML = '<span style="color:#f85149">⚠ Escribe una URL o nombre</span>';
+    return;
+  }
+  btn.disabled = true; btn.textContent = 'Enviando…'; status.textContent = '';
+  try {
+    const r = await fetch('/api/public/queue', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ video_id, title: title || null }),
+    });
+    if (!r.ok) throw new Error((await r.json()).detail || 'Error');
+    document.getElementById('video').value = '';
+    document.getElementById('title').value = '';
+    status.innerHTML = '<span style="color:#3fb950">✓ Añadido</span>';
+    setTimeout(()=>status.textContent='', 2500);
+    await refresh();
+  } catch(e) {
+    status.innerHTML = '<span style="color:#f85149">✕ ' + esc(e.message) + '</span>';
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Pedir';
+  }
+}
+
+refresh();
+setInterval(() => { if (!document.hidden) refresh(); }, 3000);
+
+let searchTimer = null;
+document.getElementById('searchBox').addEventListener('input', function(e) {
+  clearTimeout(searchTimer);
+  const q = e.target.value.trim();
+  if (q.length < 3) { document.getElementById('searchResults').innerHTML = ''; return; }
+  searchTimer = setTimeout(() => buscar(q), 500);
+});
+
+async function buscar(q) {
+  const el = document.getElementById('searchResults');
+  el.innerHTML = '<div class="muted" style="padding:10px">Buscando...</div>';
+  try {
+    const r = await fetch('/api/search?q=' + encodeURIComponent(q));
+    const data = await r.json();
+    if (!data.length) { el.innerHTML = '<div class="muted" style="padding:10px">Sin resultados</div>'; return; }
+    el.innerHTML = data.map(v => `
+      <div style="display:flex;gap:10px;padding:8px;border-bottom:1px solid #21262d;cursor:pointer"
+           onclick="elegir('${v.videoId}','${v.title.replace(/'/g,"\\'")}')">
+        <img src="${v.thumb}" style="width:60px;height:45px;border-radius:4px;object-fit:cover">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.title}</div>
+          <div class="muted" style="font-size:11px">${v.channel}</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    el.innerHTML = '<div class="muted" style="padding:10px">Error de búsqueda</div>';
+  }
+}
+
+function elegir(videoId, title) {
+  document.getElementById('video').value = videoId;
+  document.getElementById('title').value = title || '';
+  document.getElementById('searchResults').innerHTML = '';
+  document.getElementById('searchBox').value = '';
+  document.getElementById('status').innerHTML = '<span style="color:#3fb950">✓ Seleccionado: ' + title + '</span>';
+  setTimeout(() => document.getElementById('status').textContent = '', 3000);
+}
+
+async function applySettings() {
+  try {
+    const s = await fetch('/api/settings').then(r => r.json());
+    const proLink = document.querySelector('a[href="/pro"]');
+    if (proLink && s.pro_enabled === false) proLink.style.display = 'none';
+    const searchBox = document.getElementById('searchBox');
+    const searchResults = document.getElementById('searchResults');
+    if (searchBox && s.search_enabled === false) searchBox.style.display = 'none';
+    if (searchResults && s.search_enabled === false) searchResults.style.display = 'none';
+    const addBtn = document.getElementById('addBtn');
+    if (addBtn && s.queue_enabled === false) {
+      addBtn.disabled = true;
+      addBtn.textContent = 'Cola desactivada';
+    }
+  } catch(e) {}
+}
+applySettings();
+</script>
+</body>
+</html>
