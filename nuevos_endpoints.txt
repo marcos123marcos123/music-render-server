@@ -1,0 +1,36 @@
+// ============================================================
+// NUEVOS ENDPOINTS — ping adaptativo
+// ============================================================
+
+// POST /api/presence — el navegador avisa que está abierto
+app.post('/api/presence', (req, res) => {
+  state.adminActiveUntil = Date.now() + 5 * 60 * 1000;
+  res.json({ ok: true, until: state.adminActiveUntil });
+});
+
+// GET /api/ping — ping ligero del APK
+app.get('/api/ping', (req, res) => {
+  const active = state.adminActiveUntil > Date.now();
+  res.json({
+    admin_active: active,
+    next_ping_ms: active ? 1000 : 7200000,
+    ts: Date.now()
+  });
+});
+
+// POST /api/events — eventos del APK (song change, queue, etc.)
+app.post('/api/events', (req, res) => {
+  const body = req.body || {};
+  const device_id = body.device_id;
+  const events = body.events || [];
+  const snapshot = body.snapshot;
+
+  if (device_id) {
+    const dev = state.devices.get(device_id) || { device_id: device_id };
+    dev.last_seen = Date.now();
+    if (snapshot) dev.current = snapshot;
+    state.devices.set(device_id, dev);
+  }
+
+  res.json({ ok: true, received: events.length });
+});
