@@ -471,6 +471,32 @@ app.post('/api/events', (req, res) => {
 });
 
 
+
+// ============================================================
+// POST /api/disconnect — forzar desconexión del APK
+// ============================================================
+app.post('/api/disconnect', (req, res) => {
+  const target = (req.body && req.body.device) || 
+                 (Array.from(state.devices.keys())[0]);
+  if (!target) return res.status(503).json({ error: 'sin dispositivos' });
+
+  const dev = state.devices.get(target);
+  if (!dev || !dev.ws || dev.ws.readyState !== 1) {
+    return res.status(503).json({ error: 'dispositivo no conectado' });
+  }
+
+  try {
+    dev.ws.send(JSON.stringify({
+      type: 'disconnect',
+      reason: 'user_request',
+      ts: Date.now()
+    }));
+    res.json({ ok: true, sent_to: target });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 server.listen(PORT, '0.0.0.0', async () => {
   console.log(`[Server] Escuchando en 0.0.0.0:${PORT}`);
   await initDb();
