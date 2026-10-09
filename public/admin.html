@@ -16,46 +16,30 @@
   .card { background:#161b22; border:1px solid #30363d; border-radius:12px;
           padding:16px; margin-bottom:16px; }
   .card h2 { margin:0 0 12px; font-size:12px; text-transform:uppercase;
-             color:#8b949e; letter-spacing:.05em; display:flex;
-             justify-content:space-between; align-items:center; }
+             color:#8b949e; letter-spacing:.05em; }
   .status { display:flex; align-items:center; gap:8px; font-size:18px; font-weight:600; }
-  .dot { width:10px; height:10px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
   .dot.online { background:#3fb950; box-shadow:0 0 8px #3fb950; }
   .dot.offline { background:#f85149; }
-  .dot.idle { background:#8b949e; }
-  .dev { display:flex; align-items:center; justify-content:space-between;
-         padding:10px 12px; border:1px solid #21262d; border-radius:8px;
-         margin-bottom:8px; gap:8px; cursor:pointer; transition:all .15s; }
-  .dev:hover { border-color:#30363d; background:#0d1117; }
-  .dev.sel { border-color:#58a6ff; background:#0d1117; box-shadow:0 0 0 1px #58a6ff inset; }
-  .dev .info { flex:1; min-width:0; }
-  .dev .name { font-weight:600; font-size:14px; display:flex; align-items:center; gap:6px; }
-  .dev .id { font-family:monospace; font-size:11px; color:#8b949e; margin-top:2px;
-             overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .dev .last { font-size:11px; color:#8b949e; margin-top:1px; }
-  .dev .actions { display:flex; gap:6px; flex-shrink:0; }
+  .device { display:flex; justify-content:space-between; padding:8px 0;
+            border-bottom:1px solid #21262d; align-items:center; gap:8px; }
+  .device:last-child { border-bottom:none; }
   .controls { display:flex; gap:8px; flex-wrap:wrap; }
   button { background:#21262d; color:#e6edf3; border:1px solid #30363d;
-           padding:9px 14px; border-radius:8px; cursor:pointer; font-size:13px;
+           padding:10px 16px; border-radius:8px; cursor:pointer; font-size:14px;
            transition:all .15s; }
   button:hover { background:#30363d; border-color:#8b949e; }
   button.primary { background:#238636; border-color:#2ea043; }
   button.primary:hover { background:#2ea043; }
-  button.danger { background:#a6231f; border-color:#cf222e; padding:5px 10px; }
-  button.sm { padding:5px 10px; font-size:12px; }
-  button:disabled { opacity:.5; cursor:not-allowed; }
+  button.danger { background:#a6231f; border-color:#cf222e; padding:6px 10px; }
   input, select { background:#0d1117; border:1px solid #30363d; color:#e6edf3;
-                  padding:9px 12px; border-radius:8px; font-size:13px;
-                  width:100%; }
-  input:focus, select:focus { outline:none; border-color:#58a6ff; }
-  input[type=range] { padding:0; margin:0; background:transparent; }
-  input[type=checkbox] { width:auto; cursor:pointer; }
-  input[type=number] { width:80px; }
-  .row { display:flex; gap:8px; align-items:center; }
-  .row > * { flex-shrink:0; }
-  .row input:not([type=number]):not([type=checkbox]) { flex:1; }
-  .track { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #21262d;
-           align-items:center; }
+                  padding:10px 12px; border-radius:8px; font-size:14px;
+                  width:100%; margin-bottom:8px; }
+  input:focus { outline:none; border-color:#58a6ff; }
+  input[type=range] { padding:0; margin:0; background:transparent; width:100%; }
+  input[type=checkbox] { width:auto; }
+  .track { display:flex; justify-content:space-between; padding:10px 0;
+           border-bottom:1px solid #21262d; align-items:center; gap:8px; }
   .track:last-child { border-bottom:none; }
   .track .num { color:#8b949e; min-width:20px; }
   .track .info { flex:1; min-width:0; }
@@ -63,83 +47,130 @@
   .track .vid { font-size:11px; color:#8b949e; font-family:monospace; }
   .progress { background:#21262d; height:6px; border-radius:3px; overflow:hidden;
               margin-top:8px; }
-  .progress > div { background:linear-gradient(90deg,#58a6ff,#a371f7); height:100%;
-                    transition:width .3s; }
+  .progress > div { background:#58a6ff; height:100%; transition:width .3s; }
   .muted { color:#8b949e; font-size:13px; }
-  .empty { text-align:center; color:#8b949e; font-size:13px; padding:16px; }
-  .sep { border:none; border-top:1px solid #21262d; margin:16px 0; }
-  .modal-sec { padding:14px 0; border-bottom:1px solid #21262d; }
-  .modal-sec:last-child { border-bottom:none; }
-  .modal-sec h3 { font-size:11px; text-transform:uppercase; color:#8b949e;
-                  letter-spacing:.05em; margin:0 0 10px; }
-  .modal-row { display:flex; justify-content:space-between; align-items:center;
-               padding:8px 0; gap:10px; }
-  .modal-row > span:first-child { flex:1; }
-  #ms-settings-modal > div { max-height:90vh; overflow-y:auto; }
-  #ms-settings-modal > div::-webkit-scrollbar { width:6px; }
-  #ms-settings-modal > div::-webkit-scrollbar-thumb { background:#30363d; border-radius:3px; }
-  .badge { display:inline-block; padding:1px 6px; font-size:10px; border-radius:4px;
-           background:#21262d; color:#8b949e; margin-left:6px; font-weight:500; }
-  .badge.act { background:#238636; color:#fff; }
-  .spin { display:inline-block; animation:spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .row { display:flex; gap:8px; align-items:center; }
+  .row > * { flex-shrink:0; }
+  .row input { flex:1; margin-bottom:0; }
 </style>
-<script src="/ngrok-skip.js"></script>
 </head>
 <body>
-<a href="#" id="ms-settings-btn" onclick="openSettings(event)" title="Configuración"
-   style="position:fixed;top:16px;right:16px;width:44px;height:44px;
-          background:#161b22;border:1px solid #30363d;border-radius:50%;
-          display:flex;align-items:center;justify-content:center;
-          font-size:22px;text-decoration:none;color:#8b949e;z-index:1000">⚙</a>
+<div style="position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:1000">
+  <a href="#" id="ms-connect-btn" onclick="forceConnect(event)" title="Forzar conexión"
+     style="width:44px;height:44px;background:#161b22;border:1px solid #238636;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:22px;text-decoration:none;color:#3fb950;cursor:pointer">🔌</a>
+  <a href="#" id="ms-disconnect-btn" onclick="forceDisconnect(event)" title="Forzar desconexión"
+     style="width:44px;height:44px;background:#161b22;border:1px solid #cf222e;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:22px;text-decoration:none;color:#f85149;cursor:pointer">🚪</a>
+  <a href="#" id="ms-settings-btn" onclick="openSettings(event)" title="Configuración"
+     style="width:44px;height:44px;background:#161b22;border:1px solid #30363d;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:22px;text-decoration:none;color:#8b949e;cursor:pointer">⚙</a>
+</div>
 
-<div id="ms-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1001;align-items:center;justify-content:center;padding:20px">
-  <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;max-width:480px;width:100%;color:#e6edf3">
-    <h2 style="margin:0 0 8px;font-size:18px">⚙️ Configuración</h2>
-    <p style="margin:0 0 12px;font-size:12px;color:#8b949e">Admin panel · Music Server</p>
+<div id="ms-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1001;align-items:center;justify-content:center">
+  <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;max-width:420px;width:90%;color:#e6edf3">
+    <h2 style="margin:0 0 16px;font-size:18px">⚙️ Configuración</h2>
 
-    <div class="modal-sec">
-      <h3>📱 Dispositivo activo</h3>
-      <select id="cfg_device" style="margin-bottom:8px">
-        <option value="">— Todos (auto) —</option>
+
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #21262d">
+      <span>💎 Mostrar página Pro</span>
+      <input type="checkbox" id="set_pro">
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #21262d">
+      <span>🔍 Buscador en página usuario</span>
+      <input type="checkbox" id="set_search">
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #21262d">
+      <span>➕ Permitir pedir canciones</span>
+      <input type="checkbox" id="set_queue">
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #21262d">
+      <span>🔁 Repetir en bucle</span>
+      <input type="checkbox" id="set_repeat">
+    </div>
+
+    <hr style="border:none;border-top:1px solid #21262d;margin:16px 0">
+
+    <h3 style="font-size:13px;color:#8b949e;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em">🎛 Ecualizador (8 bandas)</h3>
+
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Sub-bass</span>
+      <input type="range" id="eq0" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq0v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Bass</span>
+      <input type="range" id="eq1" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq1v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Low-Mid</span>
+      <input type="range" id="eq2" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq2v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Mid</span>
+      <input type="range" id="eq3" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq3v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">High-Mid</span>
+      <input type="range" id="eq4" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq4v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Presence</span>
+      <input type="range" id="eq5" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq5v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Brilliance</span>
+      <input type="range" id="eq6" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq6v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Air</span>
+      <input type="range" id="eq7" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
+      <span id="eq7v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #21262d;margin:16px 0">
+
+    <h3 style="font-size:13px;color:#8b949e;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em">🔊 Filtro de bajos</h3>
+
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Tipo</span>
+      <select id="bfType" style="flex:1;background:#0d1117;border:1px solid #30363d;color:#e6edf3;padding:8px;border-radius:6px" onchange="onBfChange()">
+        <option value="lowshelf">Low-shelf</option>
+        <option value="lowpass">Low-pass</option>
+        <option value="highpass">High-pass</option>
+        <option value="off">Desactivado</option>
       </select>
-      <div id="cfg_dev_status" class="muted" style="font-size:12px">Sin selección</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Frecuencia</span>
+      <input type="range" id="bfFreq" min="20" max="500" value="120" oninput="onBfChange()" style="flex:1">
+      <span id="bfFreqv" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">120 Hz</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
+      <span style="min-width:110px;font-size:13px">Intensidad</span>
+      <input type="range" id="bfGain" min="-15" max="15" value="0" oninput="onBfChange()" style="flex:1">
+      <span id="bfGainv" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
     </div>
 
-    <div class="modal-sec">
-      <h3>🔄 Actualización</h3>
-      <div class="modal-row">
-        <span>Auto-refresh</span>
-        <input type="checkbox" id="cfg_auto" checked>
-      </div>
-      <div class="modal-row">
-        <span>Intervalo (segundos)</span>
-        <input type="number" id="cfg_int" value="5" min="2" max="60">
-      </div>
-      <div class="modal-row">
-        <span>Mostrar dispositivos offline</span>
-        <input type="checkbox" id="cfg_show_offline" checked>
-      </div>
-    </div>
+    <hr style="border:none;border-top:1px solid #21262d;margin:16px 0">
 
-    <div class="modal-sec">
-      <h3>🎨 Interfaz</h3>
-      <div class="modal-row">
-        <span>💎 Mostrar página Pro</span>
-        <input type="checkbox" id="set_pro">
-      </div>
-      <div class="modal-row">
-        <span>🔍 Buscador en página usuario</span>
-        <input type="checkbox" id="set_search">
-      </div>
-      <div class="modal-row">
-        <span>➕ Permitir pedir canciones</span>
-        <input type="checkbox" id="set_queue">
-      </div>
-      <div class="modal-row">
-        <span>🔁 Repetir en bucle</span>
-        <input type="checkbox" id="set_repeat">
-      </div>
+    <h3 style="font-size:13px;color:#8b949e;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em">🎚 Presets</h3>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+      <button type="button" onclick="applyEqPreset('flat')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Flat</button>
+      <button type="button" onclick="applyEqPreset('bass')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Bass+</button>
+      <button type="button" onclick="applyEqPreset('voice')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Voice+</button>
+      <button type="button" onclick="applyEqPreset('rock')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Rock</button>
+      <button type="button" onclick="applyEqPreset('karaoke')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Karaoke</button>
     </div>
 
     <div style="display:flex;gap:8px;margin-top:20px">
@@ -147,13 +178,124 @@
       <button type="button" onclick="closeSettings()" style="flex:1;background:#21262d;color:#e6edf3;border:1px solid #30363d;padding:12px;border-radius:8px;cursor:pointer">Cerrar</button>
     </div>
 
-    <hr class="sep">
+    <hr style="border:none;border-top:1px solid #21262d;margin:20px 0">
 
     <button type="button" onclick="logout()" style="width:100%;background:#a6231f;color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:600">🚪 Cerrar sesión</button>
     <div id="ms-settings-status" style="min-height:20px;font-size:13px;margin-top:10px;text-align:center"></div>
   </div>
 </div>
 
+<script>
+async function openSettings(e) {
+  if (e) e.preventDefault();
+  document.getElementById('ms-settings-modal').style.display = 'flex';
+  try {
+    const r = await fetch('/api/settings', { headers: { 'X-Admin-Token': localStorage.getItem('ms_admin_token') || '' } });
+    const d = await r.json();
+    document.getElementById('set_pro').checked = d.pro_enabled !== false;
+    document.getElementById('set_search').checked = d.search_enabled !== false;
+    document.getElementById('set_queue').checked = d.queue_enabled !== false;
+    document.getElementById('set_repeat').checked = d.repeat_infinite === true;
+  } catch(err) {}
+}
+function closeSettings() { document.getElementById('ms-settings-modal').style.display = 'none'; }
+async function saveSettings() {
+  const st = document.getElementById('ms-settings-status');
+  const body = {
+    pro_enabled: document.getElementById('set_pro').checked,
+    search_enabled: document.getElementById('set_search').checked,
+    queue_enabled: document.getElementById('set_queue').checked,
+    repeat_infinite: document.getElementById('set_repeat').checked,
+  };
+  try {
+    const r = await fetch('/api/settings', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-Admin-Token': localStorage.getItem('ms_admin_token') || ''},
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error('Error ' + r.status);
+    st.innerHTML = '<span style="color:#3fb950">✓ Guardado</span>';
+    setTimeout(() => st.textContent = '', 2000);
+  } catch(err) {
+    st.innerHTML = '<span style="color:#f85149">✕ ' + err.message + '</span>';
+  }
+}
+// ============================================================
+// ECUALIZADOR
+// ============================================================
+const EQ_IDS = ['eq0','eq1','eq2','eq3','eq4','eq5','eq6','eq7'];
+
+function onEqChange() {
+  EQ_IDS.forEach(id => {
+    const v = document.getElementById(id).value;
+    document.getElementById(id + 'v').textContent = v + ' dB';
+  });
+}
+
+function onBfChange() {
+  document.getElementById('bfFreqv').textContent = document.getElementById('bfFreq').value + ' Hz';
+  document.getElementById('bfGainv').textContent = document.getElementById('bfGain').value + ' dB';
+}
+
+function readEqValues() {
+  return EQ_IDS.map(id => parseInt(document.getElementById(id).value));
+}
+
+function readBassFilter() {
+  return {
+    type: document.getElementById('bfType').value,
+    freq: parseInt(document.getElementById('bfFreq').value),
+    gain: parseInt(document.getElementById('bfGain').value)
+  };
+}
+
+async function sendEqCommand() {
+  const body = {
+    command: 'eq',
+    values: readEqValues(),
+    bass_filter: readBassFilter()
+  };
+  try {
+    const r = await fetch('/api/command', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-Admin-Token': localStorage.getItem('ms_admin_token') || ''},
+      body: JSON.stringify(body)
+    });
+    const d = await r.json();
+    if (d.ok) {
+      const st = document.getElementById('ms-settings-status');
+      if (st) { st.innerHTML = '<span style="color:#3fb950">✓ EQ aplicado</span>'; setTimeout(() => st.textContent = '', 2000); }
+    }
+  } catch(e) { console.debug('EQ error:', e); }
+}
+
+const EQ_PRESETS = {
+  flat:    {eq:[0,0,0,0,0,0,0,0], bf:{type:'off',freq:120,gain:0}},
+  bass:    {eq:[6,8,4,0,0,0,0,0], bf:{type:'lowshelf',freq:120,gain:6}},
+  voice:   {eq:[-6,-4,-2,2,4,6,4,2], bf:{type:'highpass',freq:100,gain:-4}},
+  rock:    {eq:[4,4,2,-2,0,2,4,4], bf:{type:'lowshelf',freq:80,gain:3}},
+  karaoke: {eq:[-10,-8,-4,0,2,4,2,0], bf:{type:'highpass',freq:120,gain:-10}}
+};
+
+function applyEqPreset(name) {
+  const p = EQ_PRESETS[name];
+  if (!p) return;
+  EQ_IDS.forEach((id, i) => {
+    document.getElementById(id).value = p.eq[i];
+  });
+  document.getElementById('bfType').value = p.bf.type;
+  document.getElementById('bfFreq').value = p.bf.freq;
+  document.getElementById('bfGain').value = p.bf.gain;
+  onEqChange();
+  onBfChange();
+  sendEqCommand();
+}
+
+function logout() {
+  localStorage.removeItem('ms_admin_token');
+  window.location.href = '/login';
+}
+</script>
 <div class="container">
   <h1>🎵 Music Server B</h1>
   <div class="subtitle">Cerebro del sistema distribuido</div>
@@ -178,21 +320,18 @@
       <div class="muted" id="serverInfo" style="margin-top:8px">—</div>
     </div>
     <div class="card">
-      <h2>
-        <span>Dispositivos</span>
-        <button type="button" class="sm" onclick="scanDevices()" id="scanBtn">🔄 Buscar</button>
-      </h2>
-      <div id="devices"><div class="empty">Cargando…</div></div>
+      <h2>Dispositivos</h2>
+      <div id="devices"><div class="muted">Cargando…</div></div>
       <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <button type="button" class="sm" onclick="requestConnect()">⟳ Solicitar conexión</button>
+        <button type="button" onclick="requestConnect()">⟳ Solicitar conexión</button>
         <span id="connectStatus" style="font-size:13px"></span>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2>Reproducción actual <span id="npDevice" class="badge"></span></h2>
-    <div id="nowPlaying"><div class="empty">Sin reproducción</div></div>
+    <h2>Reproducción actual</h2>
+    <div id="nowPlaying"><div class="muted">Sin reproducción</div></div>
 
     <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
       <span style="min-width:80px;font-size:14px">🔊 Volumen</span>
@@ -212,7 +351,6 @@
     <h2>🔍 Buscar en YouTube</h2>
     <div class="row">
       <input id="searchInput" placeholder="Escribe para buscar…"
-             oninput="onSearchInput()"
              onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch();}">
       <button type="button" onclick="doSearch()">Buscar</button>
     </div>
@@ -221,7 +359,7 @@
 
   <div class="card">
     <h2>Cola</h2>
-    <div id="queue"><div class="empty">Cola vacía</div></div>
+    <div id="queue"><div class="muted">Cola vacía</div></div>
     <div class="row" style="margin-top:12px">
       <input id="newVideo" placeholder="ID o URL de YouTube">
       <input id="newTitle" placeholder="Título (opcional)" style="max-width:180px">
@@ -232,122 +370,27 @@
 </div>
 
 <script>
-// ============ ESTADO GLOBAL ============
 let token = localStorage.getItem('ms_admin_token') || '';
-let cfg = {
-  autoRefresh: true,
-  interval: 5,
-  showOffline: true,
-  device: '',
-};
-try {
-  const saved = localStorage.getItem('ms_cfg');
-  if (saved) cfg = Object.assign(cfg, JSON.parse(saved));
-} catch(_) {}
-
 let refreshTimer = null;
 let refreshInFlight = false;
-let lastDevices = [];
 
-// ============ SETTINGS MODAL ============
-async function openSettings(e) {
-  if (e) e.preventDefault();
-  document.getElementById('ms-settings-modal').style.display = 'flex';
-
-  // Cargar settings del APK
-  try {
-    const r = await fetch('/api/settings', { headers: { 'X-Admin-Token': token } });
-    const d = await r.json();
-    document.getElementById('set_pro').checked = d.pro_enabled !== false;
-    document.getElementById('set_search').checked = d.search_enabled !== false;
-    document.getElementById('set_queue').checked = d.queue_enabled !== false;
-    document.getElementById('set_repeat').checked = d.repeat_infinite === true;
-  } catch(err) {}
-
-  // Cargar config local
-  document.getElementById('cfg_auto').checked = cfg.autoRefresh;
-  document.getElementById('cfg_int').value = cfg.interval;
-  document.getElementById('cfg_show_offline').checked = cfg.showOffline;
-
-  // Rellenar dropdown de dispositivos
-  await fillDeviceDropdown();
+function startAutoRefresh() {
+  if (refreshTimer) return;
+  refreshTimer = setInterval(() => {
+    if (document.hidden) return;
+    if (refreshInFlight) return;
+    refresh();
+  }, 5000);
 }
-
-async function fillDeviceDropdown() {
-  const sel = document.getElementById('cfg_device');
-  sel.innerHTML = '<option value="">— Todos (auto) —</option>';
-  try {
-    const devs = await api('/api/devices');
-    lastDevices = devs;
-    for (const d of devs) {
-      const opt = document.createElement('option');
-      opt.value = d.device_id;
-      opt.textContent = (d.name || d.device_id) + ' · ' + (d.device_id || '');
-      sel.appendChild(opt);
-    }
-    sel.value = cfg.device || '';
-    updateDeviceStatusLabel();
-  } catch(_) {}
-}
-
-function updateDeviceStatusLabel() {
-  const dev = lastDevices.find(x => x.device_id === cfg.device);
-  const el = document.getElementById('cfg_dev_status');
-  if (!dev) {
-    el.innerHTML = cfg.device ? '⚠ Dispositivo no encontrado' : 'Sin selección (auto)';
-    el.style.color = cfg.device ? '#f85149' : '#8b949e';
-  } else {
-    const on = dev.connected ? '● Conectado' : '○ Desconectado';
-    const col = dev.connected ? '#3fb950' : '#f85149';
-    el.innerHTML = '<span style="color:' + col + '">' + on + '</span>';
-  }
-}
-
-function closeSettings() {
-  document.getElementById('ms-settings-modal').style.display = 'none';
-}
-
-async function saveSettings() {
-  const st = document.getElementById('ms-settings-status');
-
-  // Guardar config local
-  cfg.autoRefresh = document.getElementById('cfg_auto').checked;
-  cfg.interval = Math.max(2, Math.min(60, parseInt(document.getElementById('cfg_int').value) || 5));
-  cfg.showOffline = document.getElementById('cfg_show_offline').checked;
-  cfg.device = document.getElementById('cfg_device').value || '';
-  localStorage.setItem('ms_cfg', JSON.stringify(cfg));
-
-  // Guardar settings del APK
-  const body = {
-    pro_enabled: document.getElementById('set_pro').checked,
-    search_enabled: document.getElementById('set_search').checked,
-    queue_enabled: document.getElementById('set_queue').checked,
-    repeat_infinite: document.getElementById('set_repeat').checked,
-  };
-  try {
-    const r = await fetch('/api/settings', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'X-Admin-Token': token},
-      body: JSON.stringify(body)
-    });
-    if (!r.ok) throw new Error('Error ' + r.status);
-    st.innerHTML = '<span style="color:#3fb950">✓ Guardado</span>';
-    setTimeout(() => st.textContent = '', 2000);
-  } catch(err) {
-    st.innerHTML = '<span style="color:#f85149">✕ ' + err.message + '</span>';
-  }
-
-  restartTimer();
+function saveToken() {
+  token = document.getElementById('tokenInput').value.trim();
+  localStorage.setItem('ms_admin_token', token);
+  document.getElementById('loginBar').style.display = 'none';
   refresh();
+  startAutoRefresh();
+  loadVolume();
 }
 
-function logout() {
-  localStorage.removeItem('ms_admin_token');
-  localStorage.removeItem('ms_cfg');
-  window.location.href = '/login';
-}
-
-// ============ API ============
 async function api(path, opts = {}) {
   opts.headers = Object.assign({}, opts.headers, { 'X-Admin-Token': token });
   if (opts.body && typeof opts.body !== 'string') {
@@ -363,31 +406,30 @@ async function api(path, opts = {}) {
   return r.json();
 }
 
-function saveToken() {
-  token = document.getElementById('tokenInput').value.trim();
-  localStorage.setItem('ms_admin_token', token);
-  document.getElementById('loginBar').style.display = 'none';
-  refresh();
-  restartTimer();
-  loadVolume();
-}
-
-// ============ REFRESH LOOP ============
-function restartTimer() {
-  if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
-  if (!cfg.autoRefresh) return;
-  refreshTimer = setInterval(() => {
-    if (document.hidden) return;
-    if (refreshInFlight) return;
-    refresh();
-  }, cfg.interval * 1000);
-}
-
-async function scanDevices() {
-  const btn = document.getElementById('scanBtn');
-  btn.innerHTML = '<span class="spin">🔄</span>';
-  await refresh();
-  setTimeout(() => btn.innerHTML = '🔄 Buscar', 400);
+function extractVideoId(input) {
+  let s = (input || '').trim();
+  if (!s) return '';
+  let candidate = s;
+  if (!/^https?:\/\//i.test(candidate) &&
+      /^(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(candidate)) {
+    candidate = 'https://' + candidate;
+  }
+  try {
+    const u = new URL(candidate);
+    const host = u.hostname.replace(/^(www|m)\./i, '').toLowerCase();
+    if (host === 'youtu.be') {
+      const id = u.pathname.replace(/^\//, '').split('/')[0].split('?')[0];
+      return id || s;
+    }
+    if (host === 'youtube.com') {
+      const v = u.searchParams.get('v');
+      if (v) return v;
+      const m = u.pathname.match(/^\/(?:shorts|embed|v)\/([A-Za-z0-9_\-]+)/);
+      if (m) return m[1];
+      return s;
+    }
+    return s;
+  } catch (_) { return s; }
 }
 
 async function refresh() {
@@ -395,108 +437,31 @@ async function refresh() {
   refreshInFlight = true;
   try {
     const [devices, state, queue] = await Promise.all([
-      api('/api/devices').catch(() => []),
-      api('/api/state').catch(() => null),
-      api('/api/queue').catch(() => []),
+      api('/api/devices'), api('/api/state'), api('/api/queue'),
     ]);
-    lastDevices = Array.isArray(devices) ? devices : (devices.devices || []);
-    renderDevices(lastDevices);
+    renderDevices(devices);
     renderState(state);
-    renderQueue(Array.isArray(queue) ? queue : (queue.items || []));
-
-    const online = lastDevices.filter(d => d.connected).length;
+    renderQueue(queue);
     document.getElementById('serverInfo').textContent =
-      online + '/' + lastDevices.length + ' dispositivo(s) online · ' +
-      ((Array.isArray(queue) ? queue : (queue.items || [])).length) + ' en cola';
-  } catch (e) {
-    console.debug('refresh fallo:', e);
-  } finally {
-    refreshInFlight = false;
-  }
+      devices.length + ' dispositivo(s) · ' + queue.length + ' en cola';
+  } catch (e) { console.debug('refresh fallo:', e); }
+  finally { refreshInFlight = false; }
 }
 
-// ============ RENDER: DEVICES ============
 function renderDevices(devices) {
   const el = document.getElementById('devices');
-  if (!devices.length) {
-    el.innerHTML = '<div class="empty">Sin dispositivos registrados</div>';
-    return;
-  }
-  const filtered = cfg.showOffline ? devices : devices.filter(d => d.connected);
-  if (!filtered.length) {
-    el.innerHTML = '<div class="empty">Sin dispositivos online</div>';
-    return;
-  }
-  el.innerHTML = filtered.map(d => {
-    const did = d.device_id || d.device || '';
-    const isSel = (did === cfg.device);
-    const cls = (d.connected ? 'online' : 'offline');
-    const ago = d.last_seen ? ('hace ' + Math.floor((Date.now() - d.last_seen) / 1000) + 's') : '';
-    const termUrl = 'https://music-revive.railinortiz82.workers.dev/linux?device=' + encodeURIComponent(did);
-    return `<div class="dev ${isSel?'sel':''}" onclick="selectDevice('${esc(did)}')">
-      <div class="info">
-        <div class="name">
-          <span class="dot ${cls}"></span>${esc(d.name || did)}
-          ${isSel?'<span class="badge act">activo</span>':''}
-        </div>
-        <div class="id">${esc(did)}</div>
-        ${ago?'<div class="last">'+ago+'</div>':''}
-      </div>
-      <div class="actions" onclick="event.stopPropagation()">
-        <a href="${termUrl}" target="_blank" style="text-decoration:none">
-          <button type="button" class="sm" title="Terminal remota">🖥</button>
-        </a>
-      </div>
-    </div>`;
-  }).join('');
+  if (!devices.length) { el.innerHTML = '<div class="muted">Sin dispositivos registrados</div>'; return; }
+  el.innerHTML = devices.map(d => `
+    <div class="device">
+      <div>📱 ${esc(d.name)} <span class="muted">(${esc(d.device_id)})</span></div>
+      <div><span class="dot ${d.connected?'online':'offline'}"></span> ${d.connected?'Conectado':'Desconectado'}</div>
+    </div>`).join('');
 }
 
-function selectDevice(did) {
-  cfg.device = (cfg.device === did ? '' : did);
-  localStorage.setItem('ms_cfg', JSON.stringify(cfg));
-  renderDevices(lastDevices);
-  refresh();
-}
-
-// ============ RENDER: STATE (FIX "Sin reproducción") ============
-function renderState(data) {
+function renderState(states) {
   const el = document.getElementById('nowPlaying');
-  const badge = document.getElementById('npDevice');
-
-  // Normalizar: puede venir como array, objeto, string JSON, o null
-  let states = [];
-  if (Array.isArray(data)) {
-    states = data;
-  } else if (data && typeof data === 'object') {
-    states = [data];
-  } else if (typeof data === 'string' && data.length > 0 && data !== 'null') {
-    try {
-      const parsed = JSON.parse(data);
-      states = Array.isArray(parsed) ? parsed : (parsed ? [parsed] : []);
-    } catch(_) {}
-  }
-
-  // Filtrar por dispositivo seleccionado si aplica
-  if (cfg.device) {
-    states = states.filter(s => s && (s.device_id === cfg.device || s.device === cfg.device));
-  }
-
-  // Filtrar válidos (con título o video_id)
-  states = states.filter(s => s && (s.title || s.video_id));
-
-  if (!states.length) {
-    el.innerHTML = '<div class="empty">Sin reproducción</div>';
-    badge.textContent = '';
-    badge.className = 'badge';
-    return;
-  }
-
-  // Preferir el que esté reproduciendo
-  let s = states.find(x => x.playing) || states[0];
-  const did = s.device_id || s.device || '';
-  badge.textContent = did ? '📱 ' + did : '';
-  badge.className = 'badge' + (did === cfg.device ? ' act' : '');
-
+  if (!states.length) { el.innerHTML = '<div class="muted">Sin reproducción</div>'; return; }
+  const s = states[0];
   const pct = s.duration > 0 ? Math.min(100, (s.position / s.duration) * 100) : 0;
   el.innerHTML = `
     <div style="font-size:18px;font-weight:600">🎵 ${esc(s.title || s.video_id || '—')}</div>
@@ -504,14 +469,14 @@ function renderState(data) {
       ${s.playing ? '▶ Reproduciendo' : '⏸ Pausado'} · ${fmt(s.position)} / ${fmt(s.duration)}
     </div>
     <div class="progress"><div style="width:${pct}%"></div></div>
-    ${did?'<div class="muted" style="margin-top:8px">Dispositivo: '+esc(did)+'</div>':''}`;
+    <div class="muted" style="margin-top:8px">Dispositivo: ${esc(s.device_id)}</div>`;
 }
 
-// ============ RENDER: QUEUE ============
 function renderQueue(queue) {
   const el = document.getElementById('queue');
-  if (!queue || !queue.length) {
-    el.innerHTML = '<div class="empty">Cola vacía</div>';
+  if (!queue.length) {
+    el.innerHTML = '<div class="muted">Cola vacía</div>' +
+      '<div class="muted" style="font-size:12px;opacity:.7">Agrega una canción para comenzar</div>';
     return;
   }
   el.innerHTML = queue.map((q, i) => `
@@ -526,17 +491,13 @@ function renderQueue(queue) {
     </div>`).join('');
 }
 
-// ============ COMANDOS ============
 async function sendCmd(cmd) {
   try {
-    const body = { command: cmd };
-    if (cfg.device) body.device = cfg.device;
-    await api('/api/command', { method: 'POST', body });
+    await api('/api/command', { method: 'POST', body: { command: cmd } });
     setTimeout(refresh, 300);
   } catch (e) { alert('Error: ' + e.message); }
 }
 
-// ============ VOLUMEN ============
 let volumeDebounce = null;
 function onVolumeChange(v) {
   document.getElementById('volumeLabel').textContent = v + '%';
@@ -545,7 +506,7 @@ function onVolumeChange(v) {
     try {
       await api('/api/settings', { method: 'POST', body: { volume: parseInt(v) } });
       await api('/api/command', { method: 'POST', body: { command: 'volume', video_id: String(v) } });
-    } catch(e) {}
+    } catch(e) { console.debug('volumen:', e); }
   }, 200);
 }
 
@@ -559,20 +520,11 @@ async function loadVolume() {
   } catch(_) {}
 }
 
-// ============ SEARCH ============
-let searchDebounce = null;
-function onSearchInput() {
-  if (searchDebounce) clearTimeout(searchDebounce);
-  const q = document.getElementById('searchInput').value.trim();
-  if (q.length < 3) return;
-  searchDebounce = setTimeout(() => doSearch(), 450);
-}
-
 async function doSearch() {
   const q = document.getElementById('searchInput').value.trim();
   if (!q) return;
   const el = document.getElementById('searchResults');
-  el.innerHTML = '<div class="empty">Buscando…</div>';
+  el.innerHTML = '<div class="muted">Buscando…</div>';
   try {
     const r = await fetch('/api/search?q=' + encodeURIComponent(q), {
       headers: { 'X-Admin-Token': token }
@@ -580,26 +532,22 @@ async function doSearch() {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     const items = Array.isArray(data) ? data : (data.items || data.results || data.videos || []);
-    if (!items.length) { el.innerHTML = '<div class="empty">Sin resultados</div>'; return; }
-    el.innerHTML = items.slice(0, 12).map((it) => {
-      const vid = it.video_id || it.videoId || it.id || '';
+    if (!items.length) { el.innerHTML = '<div class="muted">Sin resultados</div>'; return; }
+    el.innerHTML = items.slice(0, 10).map((it, idx) => {
+      const vid = it.video_id || it.id || it.videoId || '';
       const ttl = it.title || it.name || '';
-      const thumb = it.thumb || (vid ? 'https://img.youtube.com/vi/' + vid + '/mqdefault.jpg' : '');
       return `
-        <div class="track" style="display:flex;gap:12px;align-items:center">
-          <img src="${thumb}" alt=""
-               style="width:96px;height:54px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#21262d"
-               onerror="this.style.visibility='hidden'">
-          <div class="info" style="flex:1;min-width:0">
+        <div class="track">
+          <div class="info">
             <div class="title">${esc(ttl)}</div>
             <div class="vid">${esc(vid)}</div>
           </div>
-          <button type="button" class="primary sm" style="flex-shrink:0"
+          <button type="button" class="primary" style="padding:6px 12px"
                   onclick="addSearchResult('${esc(vid)}','${esc(ttl).replace(/'/g,"&#39;")}')">+</button>
         </div>`;
     }).join('');
   } catch(e) {
-    el.innerHTML = '<div class="empty" style="color:#f85149">Error: ' + esc(e.message) + '</div>';
+    el.innerHTML = '<div class="muted" style="color:#f85149">Error: ' + esc(e.message) + '</div>';
   }
 }
 
@@ -607,13 +555,13 @@ async function addSearchResult(videoId, title) {
   try {
     await api('/api/queue', { method: 'POST', body: { video_id: videoId, title: title || null } });
     const st = document.getElementById('searchResults');
-    st.insertAdjacentHTML('afterbegin',
-      '<div class="muted" style="color:#3fb950;padding:6px 0">✓ Añadido: ' + esc(title || videoId) + '</div>');
+    const old = st.innerHTML;
+    st.insertAdjacentHTML('afterbegin', '<div class="muted" style="color:#3fb950">✓ Añadido: ' + esc(title||videoId) + '</div>');
+    setTimeout(() => { /* mantenemos resultados */ }, 100);
     refresh();
   } catch(e) { alert(e.message); }
 }
 
-// ============ ADD TO QUEUE ============
 async function addToQueue() {
   const btn = document.getElementById('addBtn');
   const status = document.getElementById('queueStatus');
@@ -624,13 +572,40 @@ async function addToQueue() {
     status.innerHTML = '<span style="color:#f85149">⚠ Introduce un ID o URL de YouTube</span>';
     return;
   }
-  if (!token) {
+  
+async function forceConnect(e) {
+  if (e) e.preventDefault();
+  try {
+    const r = await fetch('/api/reconnect', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: '{}'
+    });
+    const d = await r.json();
+    alert('🔌 ' + JSON.stringify(d));
+  } catch(err) { alert('Error: ' + err); }
+}
+
+async function forceDisconnect(e) {
+  if (e) e.preventDefault();
+  try {
+    const r = await fetch('/api/disconnect', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: '{}'
+    });
+    const d = await r.json();
+    alert('🚪 ' + JSON.stringify(d));
+  } catch(err) { alert('Error: ' + err); }
+}
+
+if (!token) {
     status.innerHTML = '<span style="color:#f85149">⚠ Falta el admin token</span>';
     document.getElementById('loginBar').style.display = 'block';
     return;
   }
   btn.disabled = true;
-  const orig = btn.textContent;
+  const original = btn.textContent;
   btn.textContent = 'Agregando…';
   status.textContent = '';
   try {
@@ -646,7 +621,7 @@ async function addToQueue() {
     status.innerHTML = '<span style="color:#f85149">✕ ' + esc(msg) + '</span>';
   } finally {
     btn.disabled = false;
-    btn.textContent = orig;
+    btn.textContent = original;
   }
 }
 
@@ -655,76 +630,69 @@ async function removeFromQueue(id) {
   catch (e) { alert(e.message); }
 }
 
-// ============ HELPERS ============
-function extractVideoId(input) {
-  let s = (input || '').trim();
-  if (!s) return '';
-  let candidate = s;
-  if (!/^https?:\/\//i.test(candidate) && /^(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(candidate)) {
-    candidate = 'https://' + candidate;
-  }
-  try {
-    const u = new URL(candidate);
-    const host = u.hostname.replace(/^(www|m)\./i, '').toLowerCase();
-    if (host === 'youtu.be') return u.pathname.replace(/^\//, '').split('/')[0].split('?')[0] || s;
-    if (host === 'youtube.com') {
-      const v = u.searchParams.get('v');
-      if (v) return v;
-      const m = u.pathname.match(/^\/(?:shorts|embed|v)\/([A-Za-z0-9_\-]+)/);
-      if (m) return m[1];
-    }
-    return s;
-  } catch (_) { return s; }
-}
-
 function fmt(s) {
   s = Math.max(0, Math.floor(s || 0));
   const m = Math.floor(s / 60), r = s % 60;
   return m + ':' + String(r).padStart(2, '0');
 }
-
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-// ============ REQUEST CONNECT ============
 let connectPollTimer = null;
 async function requestConnect() {
   const status = document.getElementById('connectStatus');
   if (connectPollTimer) { clearInterval(connectPollTimer); connectPollTimer = null; }
   let attempts = 0;
-  status.textContent = 'Esperando conexión…';
+  status.textContent = 'Esperando conexión del dispositivo…';
   status.style.color = '#8b949e';
   connectPollTimer = setInterval(async () => {
     attempts++;
     try {
       const devs = await api('/api/devices');
-      if (devs.some(d => d.connected)) {
+      const d = devs.find(x => x.device_id === 'android_a');
+      if (d && d.connected) {
         clearInterval(connectPollTimer);
         connectPollTimer = null;
-        status.textContent = '✓ Conectado';
+        status.textContent = '✓ Dispositivo conectado';
         status.style.color = '#3fb950';
         setTimeout(() => { status.textContent = ''; }, 4000);
-        refresh();
         return;
       }
     } catch (e) {}
     if (attempts >= 30) {
       clearInterval(connectPollTimer);
       connectPollTimer = null;
-      status.textContent = '✕ Sin conexión. Abre YouTube en el teléfono.';
+      status.textContent = '✕ No se pudo conectar. Abre YouTube en el teléfono.';
       status.style.color = '#f85149';
     }
   }, 1000);
 }
 
-// ============ INIT ============
+// Presence: avisar a Render cada 30s mientras la pestaña esté abierta
+function sendPresence() {
+  fetch('/api/presence', { method: 'POST' })
+    .then(() => console.debug('presence ok'))
+    .catch(err => console.debug('presence fail:', err));
+}
+
+// Cada 30s
+setInterval(sendPresence, 30000);
+
+// Al cargar
+sendPresence();
+
+// Al cerrar la pestaña
+window.addEventListener('beforeunload', () => {
+  navigator.sendBeacon && navigator.sendBeacon('/api/presence');
+});
+
 if (!token) {
   document.getElementById('loginBar').style.display = 'block';
 } else {
   refresh();
-  restartTimer();
+  startAutoRefresh();
   loadVolume();
 }
 </script>
