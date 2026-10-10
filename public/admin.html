@@ -533,16 +533,20 @@ async function doSearch() {
     const data = await r.json();
     const items = Array.isArray(data) ? data : (data.items || data.results || data.videos || []);
     if (!items.length) { el.innerHTML = '<div class="muted">Sin resultados</div>'; return; }
-    el.innerHTML = items.slice(0, 10).map((it, idx) => {
+    el.innerHTML = items.slice(0, 12).map((it, idx) => {
       const vid = it.video_id || it.id || it.videoId || '';
       const ttl = it.title || it.name || '';
+      const thumb = vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : '';
       return `
-        <div class="track">
-          <div class="info">
-            <div class="title">${esc(ttl)}</div>
-            <div class="vid">${esc(vid)}</div>
+        <div class="track" style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #21262d">
+          <img src="${thumb}" alt=""
+               style="width:96px;height:54px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#21262d"
+               onerror="this.style.visibility='hidden'">
+          <div class="info" style="flex:1;min-width:0">
+            <div class="title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ttl)}</div>
+            <div class="vid" style="font-size:11px;color:#8b949e;font-family:monospace">${esc(vid)}</div>
           </div>
-          <button type="button" class="primary" style="padding:6px 12px"
+          <button type="button" class="primary" style="padding:6px 12px;flex-shrink:0"
                   onclick="addSearchResult('${esc(vid)}','${esc(ttl).replace(/'/g,"&#39;")}')">+</button>
         </div>`;
     }).join('');
