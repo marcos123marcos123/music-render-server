@@ -462,11 +462,14 @@ function renderState(states) {
   const el = document.getElementById('nowPlaying');
   if (!states.length) { el.innerHTML = '<div class="muted">Sin reproducción</div>'; return; }
   const s = states[0];
-  const pct = s.duration > 0 ? Math.min(100, (s.position / s.duration) * 100) : 0;
+  // El APK envía milisegundos, convertir a segundos
+  const posSec = Math.max(0, Math.floor((s.position || 0) / 1000));
+  const durSec = Math.max(0, Math.floor((s.duration || 0) / 1000));
+  const pct = durSec > 0 ? Math.min(100, (posSec / durSec) * 100) : 0;
   el.innerHTML = `
     <div style="font-size:18px;font-weight:600">🎵 ${esc(s.title || s.video_id || '—')}</div>
     <div class="muted" style="margin-top:4px">
-      ${s.playing ? '▶ Reproduciendo' : '⏸ Pausado'} · ${fmt(s.position)} / ${fmt(s.duration)}
+      ${s.playing ? '▶ Reproduciendo' : '⏸ Pausado'} · ${fmt(posSec)} / ${fmt(durSec)}
     </div>
     <div class="progress"><div style="width:${pct}%"></div></div>
     <div class="muted" style="margin-top:8px">Dispositivo: ${esc(s.device_id)}</div>`;
