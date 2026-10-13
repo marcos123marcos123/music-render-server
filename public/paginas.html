@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📂 Páginas</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:#0b0f19; color:#e6edf3; min-height:100vh; padding:20px; }
+  .container { max-width:700px; margin:0 auto; }
+  h1 { margin:0 0 4px; font-size:24px; }
+  .subtitle { color:#8b949e; margin-bottom:24px; font-size:14px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:600px) { .grid { grid-template-columns:1fr; } }
+  .item { display:block; background:#161b22; border:1px solid #30363d; border-radius:12px;
+          padding:20px; text-decoration:none; color:#e6edf3; transition:all .15s; }
+  .item:hover { border-color:#58a6ff; background:#0d1117; transform:translateY(-2px); }
+  .item .icon { font-size:32px; margin-bottom:10px; display:block; }
+  .item .name { font-size:16px; font-weight:600; margin-bottom:4px; }
+  .item .desc { font-size:12px; color:#8b949e; }
+  .back { display:inline-block; margin-bottom:16px; color:#58a6ff; text-decoration:none; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="/admin" class="back">← Volver al admin</a>
+  <h1>📂 Páginas</h1>
+  <div class="subtitle">Todas las secciones del APK</div>
+
+  <div class="grid">
+    <a href="/admin" class="item">
+      <span class="icon">🎛</span>
+      <div class="name">Admin</div>
+      <div class="desc">Panel de control principal</div>
+    </a>
+
+    <a href="/pro" class="item">
+      <span class="icon">💎</span>
+      <div class="name">Vista Pro</div>
+      <div class="desc">Modo avanzado</div>
+    </a>
+
+    <a href="/verify" class="item">
+      <span class="icon">🔒</span>
+      <div class="name">Verificar</div>
+      <div class="desc">Verificación de licencias</div>
+    </a>
+
+    <a href="/Historial" class="item">
+      <span class="icon">📜</span>
+      <div class="name">Historial</div>
+      <div class="desc">Canciones reproducidas</div>
+    </a>
+
+    <a href="/Descargas" class="item">
+      <span class="icon">⬇️</span>
+      <div class="name">Descargas</div>
+      <div class="desc">Buscador y gestor de descargas</div>
+    </a>
+
+    <a href="/" class="item">
+      <span class="icon">🎵</span>
+      <div class="name">Vista Usuario</div>
+      <div class="desc">Reproductor simple</div>
+    </a>
+  </div>
+</div>
+</body>
+</html>

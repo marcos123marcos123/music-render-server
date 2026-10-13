@@ -64,7 +64,7 @@
      style="width:44px;height:44px;background:#161b22;border:1px solid #cf222e;border-radius:50%;
             display:flex;align-items:center;justify-content:center;
             font-size:22px;text-decoration:none;color:#f85149;cursor:pointer">🚪</a>
-  <a href="#" id="ms-settings-btn" onclick="openSettings(event)" title="Configuración"
+  <a href="/paginas" id="ms-settings-btn" title="Todas las páginas"
      style="width:44px;height:44px;background:#161b22;border:1px solid #30363d;border-radius:50%;
             display:flex;align-items:center;justify-content:center;
             font-size:22px;text-decoration:none;color:#8b949e;cursor:pointer">⚙</a>
@@ -73,6 +73,8 @@
 <div id="ms-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1001;align-items:center;justify-content:center">
   <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;max-width:420px;width:90%;color:#e6edf3">
     <h2 style="margin:0 0 16px;font-size:18px">⚙️ Configuración</h2>
+
+    <a href="/paginas" style="display:block;width:100%;text-align:center;background:#1f6feb;border:1px solid #388bfd;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;margin-bottom:16px;box-sizing:border-box">📂 Ver todas las páginas</a>
 
 
     <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #21262d">
@@ -93,90 +95,6 @@
     </div>
 
     <hr style="border:none;border-top:1px solid #21262d;margin:16px 0">
-
-    <h3 style="font-size:13px;color:#8b949e;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em">🎛 Ecualizador (8 bandas)</h3>
-
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Sub-bass</span>
-      <input type="range" id="eq0" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq0v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Bass</span>
-      <input type="range" id="eq1" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq1v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Low-Mid</span>
-      <input type="range" id="eq2" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq2v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Mid</span>
-      <input type="range" id="eq3" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq3v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">High-Mid</span>
-      <input type="range" id="eq4" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq4v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Presence</span>
-      <input type="range" id="eq5" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq5v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Brilliance</span>
-      <input type="range" id="eq6" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq6v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Air</span>
-      <input type="range" id="eq7" min="-15" max="15" value="0" oninput="onEqChange()" style="flex:1">
-      <span id="eq7v" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-
-    <hr style="border:none;border-top:1px solid #21262d;margin:16px 0">
-
-    <h3 style="font-size:13px;color:#8b949e;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em">🔊 Filtro de bajos</h3>
-
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Tipo</span>
-      <select id="bfType" style="flex:1;background:#0d1117;border:1px solid #30363d;color:#e6edf3;padding:8px;border-radius:6px" onchange="onBfChange()">
-        <option value="lowshelf">Low-shelf</option>
-        <option value="lowpass">Low-pass</option>
-        <option value="highpass">High-pass</option>
-        <option value="off">Desactivado</option>
-      </select>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Frecuencia</span>
-      <input type="range" id="bfFreq" min="20" max="500" value="120" oninput="onBfChange()" style="flex:1">
-      <span id="bfFreqv" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">120 Hz</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0">
-      <span style="min-width:110px;font-size:13px">Intensidad</span>
-      <input type="range" id="bfGain" min="-15" max="15" value="0" oninput="onBfChange()" style="flex:1">
-      <span id="bfGainv" style="min-width:48px;text-align:right;font-size:12px;color:#8b949e;font-family:monospace">0 dB</span>
-    </div>
-
-    <hr style="border:none;border-top:1px solid #21262d;margin:16px 0">
-
-    <h3 style="font-size:13px;color:#8b949e;margin:0 0 12px;text-transform:uppercase;letter-spacing:.05em">🎚 Presets</h3>
-
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
-      <button type="button" onclick="applyEqPreset('flat')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Flat</button>
-      <button type="button" onclick="applyEqPreset('bass')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Bass+</button>
-      <button type="button" onclick="applyEqPreset('voice')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Voice+</button>
-      <button type="button" onclick="applyEqPreset('rock')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Rock</button>
-      <button type="button" onclick="applyEqPreset('karaoke')" style="padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;border:1px solid #30363d;border-radius:6px;cursor:pointer">Karaoke</button>
-    </div>
-
-    <div style="display:flex;gap:8px;margin-top:20px">
-      <button type="button" onclick="saveSettings()" style="flex:1;background:#238636;color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:600">Guardar</button>
-      <button type="button" onclick="closeSettings()" style="flex:1;background:#21262d;color:#e6edf3;border:1px solid #30363d;padding:12px;border-radius:8px;cursor:pointer">Cerrar</button>
-    </div>
 
     <hr style="border:none;border-top:1px solid #21262d;margin:20px 0">
 
@@ -223,78 +141,6 @@ async function saveSettings() {
 // ============================================================
 // ECUALIZADOR
 // ============================================================
-const EQ_IDS = ['eq0','eq1','eq2','eq3','eq4','eq5','eq6','eq7'];
-
-function onEqChange() {
-  EQ_IDS.forEach(id => {
-    const v = document.getElementById(id).value;
-    document.getElementById(id + 'v').textContent = v + ' dB';
-  });
-}
-
-function onBfChange() {
-  document.getElementById('bfFreqv').textContent = document.getElementById('bfFreq').value + ' Hz';
-  document.getElementById('bfGainv').textContent = document.getElementById('bfGain').value + ' dB';
-}
-
-function readEqValues() {
-  return EQ_IDS.map(id => parseInt(document.getElementById(id).value));
-}
-
-function readBassFilter() {
-  return {
-    type: document.getElementById('bfType').value,
-    freq: parseInt(document.getElementById('bfFreq').value),
-    gain: parseInt(document.getElementById('bfGain').value)
-  };
-}
-
-async function sendEqCommand() {
-  const body = {
-    command: 'eq',
-    values: readEqValues(),
-    bass_filter: readBassFilter()
-  };
-  try {
-    const r = await fetch('/api/command', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'X-Admin-Token': localStorage.getItem('ms_admin_token') || ''},
-      body: JSON.stringify(body)
-    });
-    const d = await r.json();
-    if (d.ok) {
-      const st = document.getElementById('ms-settings-status');
-      if (st) { st.innerHTML = '<span style="color:#3fb950">✓ EQ aplicado</span>'; setTimeout(() => st.textContent = '', 2000); }
-    }
-  } catch(e) { console.debug('EQ error:', e); }
-}
-
-const EQ_PRESETS = {
-  flat:    {eq:[0,0,0,0,0,0,0,0], bf:{type:'off',freq:120,gain:0}},
-  bass:    {eq:[6,8,4,0,0,0,0,0], bf:{type:'lowshelf',freq:120,gain:6}},
-  voice:   {eq:[-6,-4,-2,2,4,6,4,2], bf:{type:'highpass',freq:100,gain:-4}},
-  rock:    {eq:[4,4,2,-2,0,2,4,4], bf:{type:'lowshelf',freq:80,gain:3}},
-  karaoke: {eq:[-10,-8,-4,0,2,4,2,0], bf:{type:'highpass',freq:120,gain:-10}}
-};
-
-function applyEqPreset(name) {
-  const p = EQ_PRESETS[name];
-  if (!p) return;
-  EQ_IDS.forEach((id, i) => {
-    document.getElementById(id).value = p.eq[i];
-  });
-  document.getElementById('bfType').value = p.bf.type;
-  document.getElementById('bfFreq').value = p.bf.freq;
-  document.getElementById('bfGain').value = p.bf.gain;
-  onEqChange();
-  onBfChange();
-  sendEqCommand();
-}
-
-function logout() {
-  localStorage.removeItem('ms_admin_token');
-  window.location.href = '/login';
-}
 </script>
 <div class="container">
   <h1>🎵 Music Server B</h1>
